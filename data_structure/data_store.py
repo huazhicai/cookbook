@@ -45,3 +45,20 @@ class DataValue(object):
         if self.value is None:
             return True
         return self.value < other.value
+
+
+class DataList(list):
+    def export(self):
+        return list(item.export() for item in self)
+
+
+class DataDict(dict):
+    def __init__(self, group):
+        super(DataDict, self).__init__()
+        self.group = group
+
+    def get_group(self):
+        return self.group
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__}'
