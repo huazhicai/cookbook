@@ -106,8 +106,54 @@ class DataTree(object):
 
         content[leaf] = value
 
+    def merge(self, other_tree):
+        assert self.meta == other_tree.meta
+        merge(self.store, other_tree.store, [], self.meta)
+
+    def export(self):
+        return self.store.export()
+
 
 def merge_value(store1, store2):
     assert isinstance(store1, DataValue)
     assert isinstance(store2, DataValue)
     return store2 if store2.priority > store1 else store1
+
+
+def merge_dict(store1, store2, current_path, meta):
+    assert isinstance(store1, DataDict)
+    assert isinstance(store2, DataDict)
+    for key, value in store2.items():
+        store1[key] = merge(store1.get(key), value, current_path + [key], meta)
+    return store1
+
+
+def merge_list(store1, store2):
+    assert isinstance(store1, DataList)
+    assert isinstance(store2, DataList)
+
+    nodup_ele = []
+    for ele2 in store2:
+        for ele1 in store1:
+            if ele2 == ele1:
+                break
+        else:
+            nodup_ele.append(ele2)
+    return DataList(store1 + nodup_ele)
+
+
+def merge(store1, store2, current_path, meta):
+    if store1 is None or store2 is None:
+        return store1 or store2
+
+    if not current_path:
+        merge_dict(store1, store2, current_path, meta)
+
+    node_meta = meta.get_node_by_path(KEY_PATH_DELIMITER).join(current_path)
+    if node_meta.is_parent():
+        if node_meta.is_list():
+            return merge_list(store1, store2)
+        else:
+            return merge_dict(store1, store2, current_path, meta)
+    else:
+        return merge_value(store1, store2)

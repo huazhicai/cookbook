@@ -60,5 +60,8 @@ class DataDict(dict):
     def get_group(self):
         return self.group
 
+    def export(self):
+        return dict((k, v.export()) for k, v in self.items())
+
     def __repr__(self):
         return f'<{self.__class__.__name__}'
