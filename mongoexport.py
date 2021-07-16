@@ -1,17 +1,8 @@
 # -*- coding:utf-8 -*-
-import re
 import json
 from pymongo import MongoClient
 
-URI = 'mongodb://aiit-zhyl:zhyl123456@10.8.6.106:27017'
-DB = 'aiit_zhyl_cache'
-COLLECTION = 'lungcancer'
-LIMIT = 0
-FIELDS = 'zhyl11001.zhyl11002,zhyl200001.zhyl201001.zhyl201011,zhyl200001.zhyl201001.zhyl201019,zhyl200001.zhyl201001.zhyl201020.zhyl201021,zhyl200001.zhyl201001.zhyl201020.zhyl201022'
-FIELDS = re.split(r',|\.', FIELDS)
-flag = 'file'
-filter_field = 'zhyl201011'
-inhospital_no = []
+from config.config import *
 
 
 class Exporter(object):
@@ -25,7 +16,7 @@ class Exporter(object):
             return True
 
     def read_csv(self):
-        with open('diagnoseData.json', 'r', encoding='utf-8') as f:
+        with open('config/diagnoseData.json', 'r', encoding='utf-8') as f:
             for line in f:
                 yield json.loads(line)
 
@@ -75,7 +66,7 @@ class Exporter(object):
             raise Exception(data)
 
     def serialization(self, text):
-        with open('exportData.json', 'a', encoding='utf-8') as f:
+        with open('config/exportData.json', 'a', encoding='utf-8') as f:
             f.write(text + '\n')
 
 

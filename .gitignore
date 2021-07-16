@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/config/exportData.json
+/config/diagnoseData.json
+/.idea/
+/data_structure/config/
+/config/
+.gitignore
