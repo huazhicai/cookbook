@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Topic: unpacking sequence
-Desc :
+Desc : 星号解压语法
 """
 
 p = (4, 5)
